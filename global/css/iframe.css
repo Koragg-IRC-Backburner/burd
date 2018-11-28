@@ -6,6 +6,7 @@ html,body{
 	font-size:15px;
 	height:calc(100% - 10px);
 	padding:5px;
+	
 }
 
 h1,h2,h3,h4{
@@ -17,7 +18,7 @@ h1,h2,h3,h4{
 }
 h2{
 	font-size:1.6em;
-	border-bottom: 1px solid #868686;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.30);
 }
 h3{
 	font-size:1.4em;
@@ -33,7 +34,7 @@ div.section{
 
 
 div.slider{
-	background:url('../../images/icons/baseline_toggle_off_white_18dp.png') no-repeat center left;
+	background:url('../../images/icons/slider-off-test.png') no-repeat center left;
 	background-size:35px;
 	padding-left: 37px;
 	opacity:0.7;
@@ -67,10 +68,10 @@ a{
 
 div.list div.item{
 	padding:5px;
-	border-bottom: 1px solid #636363;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.30);
 }
 div.list div.item:hover,div.list div.selected{
-	background:#3A3B40;
+	background:rgba(255, 255, 255, 0.10);
 	cursor:default;
 }
 div.list div.item div.buttons{
@@ -101,7 +102,7 @@ div.text_input input{
 
 
 
-input[type='text'],input[type='password'] {
+input[type='text'],input[type='password'],input[type='number'],textarea {
     border: 0;
     background: #58595d;
     height: 16px;
@@ -128,7 +129,7 @@ div.simple_list div.simple_item{
 	padding:6px;
 }
 div.simple_list div.simple_item:hover{
-	background:#585A5E;
+	background: rgba(255, 255, 255, 0.12);
 	color:white;
 	cursor:default;
 }

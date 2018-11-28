@@ -4,8 +4,10 @@
 		<title>About</title>
 		<meta charset="utf-8">
 		<link href="../global/css/iframe.css" rel="stylesheet">
+		<link href="settingscommon.css" rel="stylesheet">
 		<script src="../global/js/jquery.min.js"></script>
 		<script src="../global/js/iframe.js"></script>
+		<script src="settingscommon.js"></script>
 		<style>
 			body{
 				background:url(images/ducklogo.png) no-repeat center bottom;
@@ -32,7 +34,7 @@
 					if( e.data.c == "version" ) $("span.version").text(e.data.version);
 				}, false);
 				postMsg({c: "get_version"});
-				var bgs = ($(window).height() - 200);
+				var bgs = ($(window).height() - 250);
 				if(bgs > 340) bgs = "340";
 				$("body").css("background-size", "auto " + bgs + "px");
 				$('body').on('keydown', function(e) {
@@ -43,9 +45,9 @@
 			});
 		</script>
 	</head>
-	<body>
+	<body class="default">
 		<h2>
-			<img id="back" style="width: 18px;" src="../images/icons/baseline_arrow_back_white_18dp.png">
+			<div id="back">&nbsp;</div>
 			About
 		</h2>
 		
@@ -67,8 +69,14 @@
 				<tr>
 					<td>Beta testers:</td>
 					<td>
-						<div>Shan</div>
-						<div>Time-Warp</div>
+						<div><a href="http://aerospacechat.com">Koragg</a></div>
+						<div><a href="https://jordanko.ch/">Jordan Koch</a></div>
+					</td>
+				</tr>
+				<tr>
+					<td>Support:</td>
+					<td>
+						<div><a href="https://burd.detectivetaco.net/">burd.detectivetaco.net</a></div>
 					</td>
 				</tr>
 			</table>

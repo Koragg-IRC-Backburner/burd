@@ -12,6 +12,8 @@ var socket = {
 
 	sendData: function(data, id){
 		/* sends data to a socket matching id */
+		data = data.replace(/\u00A0/g, " ");
+		scripting_iframe.contentWindow.postMessage({c: "irc_data_out", data: data, network: id}, "*");
 		var sock = this.getSocketByID(id);
 		sock.socket.write(data + "\r\n");
 		if(this.logData) console.log("< " + data);
@@ -36,10 +38,7 @@ var socket = {
 		}else{
 			channel("!", id).addInfo( "Disconnected from IRC" );
 		}
-		
-		
 
-		
 	},
 	
 	create: function(server, port, ssl, id){
@@ -51,12 +50,12 @@ var socket = {
 		sid = id||socket.newID();
 		if(ssl){
 			sock = tls.connect({port: port, host: server, rejectUnauthorized: false}, function() {
-				socket.parseData( "CONNECTED", sid );
+				socket.parseData( "CONNECTED", sid, who );
 			});
 		}else{
 			sock = new net.Socket();
 			sock.connect(port, server, function() {
-				socket.parseData( "CONNECTED", sid );
+				socket.parseData( "CONNECTED", sid, who );
 			});
 		}
 		
@@ -65,7 +64,7 @@ var socket = {
 			sObject.socket = sock;
 		}else{
 			
-			var sObject = { id: sid, socket: sock, networkInfo: {}, cache: "", tmpPacketHold: [], reconnectTimer: 0 };
+			var sObject = { id: sid, socket: sock, networkInfo: {}, cache: "", tmpPacketHold: [], reconnectTimer: 0, dataHook: function(e){} };
 			sObject.networkInfo.getISUPPORT = function(e){
 				 for(var i in this.ISUPPORT){
 					 var sb = this.ISUPPORT[i].split("=");
@@ -88,7 +87,10 @@ var socket = {
 				var db = (sObject.cache + data).split("\n");
 				sObject.cache = "";
 				for(var i in db){
-					socket.parseData(db[i], sObject.id);
+					if(db[i] != ""){
+						scripting_iframe.contentWindow.postMessage({c: "irc_data", data: db[i], network: sObject.id}, "*");
+						socket.parseData(db[i], sObject.id, who);
+					}
 				}
 			}else{
 				/* mid packet, so lets cache. */
@@ -125,10 +127,10 @@ var socket = {
 	},
 	
 	newID: function(){
-		return Math.floor(Math.random()*99999) + 1;
+		return Math.floor(Math.random()*9999999) + 1;
 	},
 	
-	parseData: function(data, id){
+	parseData: function(data, id, who){
 		/* see parsedata.js */
 	}
 }

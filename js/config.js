@@ -1,4 +1,5 @@
-var appVersion = "0.05.1";
+var appVersion = "0.6.1";
+var appURL = "http://burdirc.haxed.net/";
 var cryptoKey = "Pizza";
 var config = {
 	animation:200,
@@ -11,6 +12,10 @@ var config = {
 	nickColors: true,
 	textColors: true,
 	checkForUpdates: true,
+	textPrefixes: true,
+	tabnickchar: ":",
+	fontSize: "15px",
+	theme: "default.css",
 	logs: {
 		enabled: true,
 		path: "%dataPath%/logs"
@@ -22,19 +27,26 @@ var config = {
 		{ command: "sv", action: "echo You're using Burd %v" },
 		{ command: "wii", action: "whois &2 &2" }
 	],
-	highlights: [ "%n", "quack" ],
+	highlights: [ "%n" ],
 	CTCP: {
-		version: "Burd IRC http://haxed.net/burd",
+		version: "Burd IRC http://haxed.net/burdirc",
 		rateLimit: 1
 	},
 	ignores:[
 		{type: "regex", value: "^quack123$"},
-		{type: "user", value: "test!*@*"}
+		{type: "user", value: "faketestnick!*@*"}
 	],
 	sounds: { highlight: true, pm: true, notice: true },
-	networks: [
-
-	]
+	showChannelMedia: true,
+	mediaWhiteList: [
+		
+	],
+	fileUploadService: {
+		uri: "https://arxius.io/",
+		fileParam: "file",
+		miscParams: ["apikey=10101010101010", "example=test"]
+	},
+	networks: []
 }
 
 

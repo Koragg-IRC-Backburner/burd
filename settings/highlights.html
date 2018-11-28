@@ -25,6 +25,14 @@
 					}}
 				});
 			});
+			$('body').on('click', '#add', function() {
+				if($("input#highlight").val()==""){
+					alert("nothing to add");
+				}else{
+					config.highlights.push($("input#highlight").val());
+					buildList();
+				}
+			});
 			applyConfig = function(){
 				buildList();
 			}
@@ -55,16 +63,20 @@
 				padding:3px;
 			}
 			table tr:hover{
-				background:#50545a;
+				background:rgba(255, 255, 255, 0.12);
 			}
 			table .thead{
-				background:#5e6269;
+				background:rgba(255, 255, 255, 0.12);
+			}
+			div.hdr{
+				float:left;
+				width:80px;
 			}
 		</style>
 	</head>
-	<body>
+	<body class="default">
 		<h2>
-			<img id="back" style="width: 18px;" src="../images/icons/baseline_arrow_back_white_18dp.png">
+			<div id="back">&nbsp;</div>
 			Highlights
 		</h2>
 		
@@ -75,5 +87,12 @@
 
 		</table>
 		<div style="font-size:12px;margin-top:5px;text-align:center;color:#e6afaf;">( %n represents your current nick )</div>
+				<div style="padding-top:5px;margin-top:5px;border-top:1px solid #848484;">
+			<div class="hdr">Highlight:</div>
+			<div class="vlu"><input type="text" id="highlight" style="width:190px"></div>
+		</div>
+		<div>
+			<input type="button" id="add" style="width:70px" value="Add">
+		</div>
 	</body>
 </html>

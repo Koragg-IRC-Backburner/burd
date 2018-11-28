@@ -1,4 +1,6 @@
+var requestedChannel = "";
 function parseInput(input,chan,network,userCommand){
+	input = input.replace(/\u00A0/g, " ");
 	chan = HTML.decodeParm(chan);
 	if(input == "") return;
 	var co = channel(chan,network);
@@ -10,13 +12,15 @@ function parseInput(input,chan,network,userCommand){
 	var type = co.object.attr("type");
 	co.object.find("input.channel_input").val("");
 	
+	messageHistory.push(input);
+	if(messageHistory.length > 20) messageHistory.splice(0,1);
 	
 	if( input.substr(0,1) == "/" ){
 		
 		switch(UC){
 			
 			case "LIST":
-				window.open("chanlist/index.html");
+				openWin("chanlist/index.html", "width=700,height=500");
 				break;
 			
 			case "AWAY":
@@ -49,6 +53,7 @@ function parseInput(input,chan,network,userCommand){
 				}
 				break;
 			case "CYCLE":
+			case "REJOIN":
 				socket.sendData("PART " + chan, network);
 				socket.sendData("JOIN " + chan, network);
 				break;
@@ -57,6 +62,23 @@ function parseInput(input,chan,network,userCommand){
 				remote.getCurrentWindow().toggleDevTools();
 				break;
 			
+			case "ENCHODE":
+				if(pCount(1)){
+					var strokes = 0;
+					var lb = bits[bits.length - 1];
+					if(lb.match(/^\-\-stroke\=[0-9][0-9]?$/) != null){
+						strokes = parseInt(lb.split("=")[1]);
+						input = input.replace(" " + lb, "");
+						console.log(strokes);
+					}
+					var dickText = cocktography.enchode(getAfter(1), strokes);
+					for(var i in dickText){
+						socket.sendData("PRIVMSG " + chan + " :" + dickText[i], network);
+					}
+					co.addInfo("Sent enchoded message in " + dickText.length + " part(s): " + getAfter(1));
+				}
+				break;
+				
 			case "ECHO":
 				co.addInfo(getAfter(1));
 				break;
@@ -69,7 +91,17 @@ function parseInput(input,chan,network,userCommand){
 						co.addInfo("Not a channel window", "error-info");
 					}
 				}
-				break;		
+				break;
+
+			case "INVITE":
+				if(pCount(1)){
+					if(bits.length > 2){
+						socket.sendData("INVITE " + getAfter(1), network);
+					}else{
+						socket.sendData("INVITE " + getAfter(1) + " " + chan, network);
+					}
+				}
+				break;
 				
 			case "KICKBAN":
 				if(pCount(1)){
@@ -86,7 +118,7 @@ function parseInput(input,chan,network,userCommand){
 			case "KICK":
 				if(pCount(1)){
 					if(type == "channel"){
-						socket.sendData("KICK " + chan + " " + bits[1], network);
+						socket.sendData("KICK " + chan + " " + bits[1] + " :" + getAfter(2), network);
 					}else{
 						co.addInfo("Not a channel window", "error-info");
 					}
@@ -98,26 +130,30 @@ function parseInput(input,chan,network,userCommand){
 					co.addInfo(UC + " expects more parameters", "error-info");
 					return;
 				}
+				requestedChannel = getAfter(1);
 				socket.sendData(UC + " " + getAfter(1), network);
 				break;
 				
 			case "MODE":
-				
+				if(bits[1].substr(0,1) == "+" || bits[1].substr(0,1) == "-"){
 					if(type == "channel"){
 						socket.sendData("MODE " + chan + " " + getAfter(1), network);
 					}else{
 						socket.sendData("MODE " + nick + " " + getAfter(1), network);
 					}
-				
+				}else{
+					socket.sendData("MODE " + getAfter(1), network);
+				}
 				break;
 				
 			case "MSG":
 			case "QUERY":
 				if(pCount(1)){
 					if(bits.length == 2){
-						channel(bits[1], id).create("new_pm_window");
+						channel(bits[1], network).create("new_pm_window");
 					}else{
 						socket.sendData("PRIVMSG " + bits[1] + " :" + getAfter(2), network);
+						co.addInfo("-&rsaquo;<b>" + HTML.encodeString(bits[1]) + "</b>&lsaquo;- " + HTML.encodeString(getAfter(2)), "", true);
 					}
 				}
 				break;
@@ -125,6 +161,7 @@ function parseInput(input,chan,network,userCommand){
 			case "NOTICE":
 				if(pCount(2)){
 					socket.sendData("NOTICE " + bits[1] + " :" + getAfter(2), network);
+					co.addInfo("-&rsaquo;<b>" + HTML.encodeString(bits[1]) + "</b>&lsaquo;- " + HTML.encodeString(getAfter(2)), "", true);
 				}
 				break;
 				
@@ -139,9 +176,8 @@ function parseInput(input,chan,network,userCommand){
 				break;
 				
 			case "PART":
-				if( bits.length < 2 ){
-					co.addInfo(UC + " expects more parameters", "error-info");
-					return;
+				if( bits.length == 1 ){
+					socket.sendData(UC + " " + chan + " :BurdIRC " + appURL, network);
 				}else if( bits.length == 2 ){
 					socket.sendData(UC + " " + getAfter(1), network);
 				}else{
@@ -167,8 +203,10 @@ function parseInput(input,chan,network,userCommand){
 				break;
 				
 			case "QUIT":
-				if(pCount(1)){
-					socket.sendData(getAfter(1), network);
+				if(bits.length == 1){
+					socket.sendData("QUIT : BurdIRC " + appURL, network);
+				}else{
+					socket.sendData("QUIT :" + getAfter(1), network);
 				}
 				break;
 				
@@ -186,11 +224,20 @@ function parseInput(input,chan,network,userCommand){
 				
 				
 			case "TOPIC":
-				if(pCount(1)){
-					if(type == "channel"){
-						socket.sendData("TOPIC " + chan + " :" + getAfter(1), network);
+				sock.networkInfo["redirectTopic"] = true;
+				if(bits.length == 1){
+					socket.sendData("TOPIC " + chan, network);
+				}else if(bits.length == 2){
+					if(isChannel(bits[1])){
+						socket.sendData("TOPIC " + bits[1], network);
 					}else{
-						co.addInfo("Not a channel window", "error-info");
+						socket.sendData("TOPIC " + chan + " :" + bits[1], network);
+					}
+				}else{
+					if(isChannel(bits[1])){
+						socket.sendData("TOPIC " + bits[1] + " :" + getAfter(2), network);
+					}else{
+						socket.sendData("TOPIC " + chan + " :" + getAfter(1), network);
 					}
 				}
 				break;	
@@ -294,12 +341,33 @@ function parseInput(input,chan,network,userCommand){
 					}
 				}
 				break;
+				
 			case "SYSINFO":
 				var sinfo = sysinfo();
+				co.addInfo("This shitty command brought to you by Taco", "");
 				socket.sendData("PRIVMSG " + chan + " :" + sinfo, network);
 				co.addPrivmsg(nick, "*!*@*", color, false, sinfo);
 				
 				break;
+			case "UPLOAD-KEY":
+				if(pCount(1)){
+					config.uploadApiKey = getAfter(1);
+					co.addInfo("Upload key has been set", "");
+				}
+				break;
+			case "UPDATE":
+				co.addInfo("Checking for updates now...", "");
+				updateCheck();
+				break;
+			case "RELOADTHEME":
+				$("link#theme").attr('href', 'themes/' + config.theme + "?");
+				break;
+			case "UMODE":
+				if(pCount(1)){
+					socket.sendData("MODE " + nick + " " + getAfter(1), network);
+				}
+				break;
+				
 			case "VERSION":
 				if(pCount(1)){
 					socket.sendData("PRIVMSG " + bits[1] + " :" + String.fromCharCode(1) + "VERSION" + String.fromCharCode(1), network);
@@ -316,8 +384,12 @@ function parseInput(input,chan,network,userCommand){
 		if(chan == "network console"){
 			co.addInfo("This is the network console, you can't send messages here. For a list of command try /help.");
 		}else{
-			socket.sendData( "PRIVMSG " + chan + " :" + input, network );
 			co.addPrivmsg(nick, "*!*@*", color, false, input);
+			if(input.toLowerCase().indexOf("ickserv") > -1 && input.toLowerCase().indexOf("ickserv") < 3){
+				co.addInfo("Your message was not sent to the channel for security reasons. Using nickserv from a channel is unsafe.");
+			}else{
+				socket.sendData( "PRIVMSG " + chan + " :" + input, network );
+			}
 		}
 	}
 	
@@ -381,3 +453,10 @@ function parseInput(input,chan,network,userCommand){
 	}
 }
 
+function isChannel(e){
+	var chans = "#+~&";
+	if(chans.indexOf(e.substr(0,1))>-1){
+		return true;
+	}
+	return false;
+}

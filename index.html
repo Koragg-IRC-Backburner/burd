@@ -7,10 +7,38 @@
 		<link href="default.css" rel="stylesheet">
 		<link href="global/css/menu.css" rel="stylesheet">
 		<style>
-
-
-
+			div#stickies{
+				width:500px;
+				position:absolute;
+				z-index:5;
+				 left:calc(50% - 500px / 2);
+			}
+			div#stickies div.sticky{
+				background:#E76820;
+				padding:10px;
+				border-top:1px solid #C02E1D;
+				color:white;
+				font-size:0.9em;
+				text-align:center;
+			}
+			div#stickies div.sticky div.closer{
+				background: url('images/icons/baseline_clear_white_18dp.png') no-repeat center center;
+				float:right;
+				height:15px;
+				width:15px;
+				background-size:15px;
+				cursor:pointer;
+			}
+			div#stickies div.sticky div.closer:hover{
+				background-size:20px;
+			}
+			div#stickies a{
+				color:white;
+			}
 		</style>
+
+		<link id="theme" href="themes/default.css" rel="stylesheet">
+
 		<script src="global/js/jquery.min.js"></script>
 		<script>
 			window.eval = global.eval = function () {
@@ -18,11 +46,12 @@
 			}
 			if(typeof(require)!="undefined") window.$ = window.jQuery = require('./global/js/jquery.min.js');
 		</script>
+		<script src="global/js/jquery-ui.min.js"></script>
 		<script src="js/config.js"></script>
+		<script src="js/main.js"></script>
 		<script src="js/color.js"></script>
 		<script src="js/enums.js"></script>
 		<script src="js/socket.js"></script>
-		<script src="js/main.js"></script>
 		<script src="global/js/menu.js"></script>
 		<script src="js/menuobjects.js"></script>
 		<script src="js/iframe.js"></script>
@@ -36,18 +65,22 @@
 		<script src="js/updatechecker.js"></script>
 		<script src="js/inputrequest.js"></script>
 		<script src="js/logging.js"></script>
+		<script src="js/who.js"></script>
 		<script src="js/parsedata.js"></script>
+		<script src="js/uploadfiles.js"></script>
+		<script src="js/keyboardevents.js"></script>
 	</head>
-	<body>
+	<body class="default">
+		<iframe id="scripting_iframe" src="scripts_runner/index.html" style="display:none"></iframe>
 		<div id="overlay" class="covering">
 			&nbsp;
 		</div>
-		<div id="input_request" class="covering">
+		<div id="input_request" class="covering default">
 			<div class="input_title" style="">
 				Input Requested
 			</div>
 			<div class="input_content" style="">
-				
+
 				<!--
 				<table class="input" style="width:100%;">
 					<tr>
@@ -73,7 +106,7 @@
 				<div style="font-size:20px;padding:10px;background:#34353a;">
 					Client updates found
 				</div>
-				<div style="font-size:15px;padding:10px;">
+				<div class="update-info" style="font-size:15px;padding:10px;">
 					A more up-to-date version of this client was found.
 				</div>
 				<div style="font-size:15px;padding:10px;">
@@ -88,188 +121,69 @@
 					<input type="button" value="Update now" id="update_go">
 				</div>
 		</div>
+		<div id="uploading" class="covering">
+			<div style="margin-bottom:1em;">Uploading...</div>
+			<div><img src="images/loading.svg"></div>
+		</div>
 		<div id="sidebar_iframe" class="covering">
 			<iframe src="about:blank"></iframe>
+		</div>
+		<div id="stickies">
+
 		</div>
 		<div id="main_container">
 			<div style="float:left;height:calc(100% - 1px);">
 				<div id="main_list_container">
-					<div class="server_list" style="display:none;">
-						<div class="server_title">
-							Test
-						</div>
-						<div class="channel_item">
-							<span class="title">Network Console</span>
-						</div>
-						<div class="channel_item notice">
-							<span class="title">#ThisIsAChannel</span>
-						</div>
-						<div network=2 channel="#test2" class="channel_item selected">
-							<span class="title">#test2</span>
-							<div class="unread">2</div>
-							<div class="channel_closer">&nbsp;</div>
-						</div>
-						<div network=2 channel="lol" class="channel_item">
-							<span class="title">LOL</span>
-							<div class="unread">20</div>
-							<div class="channel_closer">&nbsp;</div>
-						</div>
-					</div>
 
-					
+
 				</div>
 				<div id="bottom_menu">
 					<div id="settings_button" class="i_button" style="float:left;margin-right:10px;">&nbsp;</div>
-					<div id="new_button" class="i_button" style="float:left;background-image:url(images/icons/baseline_fiber_new_white_18dp.png);">&nbsp;</div>
-					<div id="hamburger_button" class="i_button" style="float:right;background-image:url(images/icons/baseline_menu_white_18dp.png);">&nbsp;</div>
+					<div id="new_button" class="i_button" style="float:left;">&nbsp;</div>
+					<div id="hamburger_button" class="i_button" style="float:right;">&nbsp;</div>
 				</div>
 			</div>
 			<div id="channel_container">
-		
-		
-				<div class="channel" network=2 channel="lol" type="pm" style="display:none">
-					<div class="meta">
-						<div class="title">
-							<span class="chan_name">LOL</span>
 
-						</div>
-
-						<div class="clear">&nbsp;</div>
-					</div>
-					<div class="channel_content">
-					
-						<div class="user_message">
-							<div class="message_date">[11:11:11]</div>
-							<div class="user_name">
-								‹<span class="name" style="color:#1395BA">JimJohn</span>›
-							</div>
-							<div class="message">
-								Hello this is my message.
-							</div>
-							<div class="clear">&nbsp;</div>
-						</div>
-						
-					</div>
-					<div class="bottom">
-						<input type="text" class="channel_input">
-					</div>
-				</div>
-				
-			
-			
-				<div class="channel" network=2 type="channel" channel="#test2">
-					<div class="meta">
-						<div class="title">
-							<span class="chan_name">#test2</span>
-
-							<span class="topic">
-								This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic This is a topic
-							</span>
-						</div>
-						<div class="usercount">Users Here - 11</div>
-						<div class="clear">&nbsp;</div>
-					</div>
-					<div class="channel_users">
-						<div class="user" style="color:#1395BA">JimBob</div>
-						<div class="user">Lol</div>
-					</div>
-					<div class="channel_content">
-					
-						<div class="user_message">
-							<div class="message_date">[11:11:11]</div>
-							<div class="user_name">
-								‹<span class="name" style="color:#1395BA">JimJohn</span>›
-							</div>
-							<div class="message">
-								Hello this is my message.
-							</div>
-							<div class="clear">&nbsp;</div>
-						</div>
-						
-						<div class="user_message">
-							<div class="message_date">[11:11:11]</div>
-							<div class="user_name">
-								‹<span class="name" style="color:#1395BA">JimJohn</span>›
-							</div>
-							<div class="message">
-								Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. 
-							</div>
-							<div class="clear">&nbsp;</div>
-						</div>
-						
-						<div class="server-info text-in">password2 (password2!~password@unaffiliated/password2) has joined the channel.</div>
-						
-						<div class="user_message">
-							<div class="message_date">[11:11:11]</div>
-							<div class="user_name">
-								<span class="name">JimJohnJimJohnJim</span>
-							</div>
-							<div class="message">
-								has joined the channel
-							</div>
-							<div class="clear">&nbsp;</div>
-						</div>
-						
-						
-						<div class="channel_info">
-							<div class="message_date">[11:11:11]</div>
-							<div class="icon text-out">
-								&nbsp;
-							</div>
-							<div class="message">
-								JimJohnJimJohnJim has joined the channel
-							</div>
-							<div class="clear">&nbsp;</div>
-						</div>
-						
-						<div class="user_message">
-							<div class="message_date">[11:11:11]</div>
-							<div class="user_name">
-								‹<span class="name" style="color:#1395BA">JimJohnJimJohnJim</span>›
-							</div>
-							<div class="message">
-								Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. Hello this is my message. 
-							</div>
-							<div class="clear">&nbsp;</div>
-						</div>
-						
-					</div>
-					<div class="bottom">
-						<input type="text" class="channel_input">
-					</div>
-				</div>
 			</div>
 		</div>
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
+
 		<div id="sound" style="display:none;">
 		</div>
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		<template id="new_user_message">
 			<div class="user_message truncate %classes%">
 				<div class="message_date">[%date%]</div>
 				<div class="user_name">
-					‹<span class="name" style="color:%color%">%nick%</span>›
+					&lt;<span class="name" style="color:%color%">%nick%</span>&gt;
 				</div>
-				<div class="message">
-					%message%
-				</div>
+				<div class="message">%message%</div>
 				<div class="clear">&nbsp;</div>
 			</div>
 		</template>
-		
+
+		<template id="new_channel_media">
+			<div class="channel_media truncate " guid="%guid%">
+				<div class="message_date">[%date%]</div>
+				<div class="imgremove" guid="%guid%">&nbsp;</div>
+				<img class="mediaimg" src="%url%" onerror="this.src = 'images/pixly.png';">
+				<div class="clear">&nbsp;</div>
+			</div>
+		</template>
+
 		<template id="new_channel_info">
 			<div class="channel_info truncate">
 				<div class="message_date">[%date%]</div>
@@ -282,33 +196,28 @@
 				<div class="clear">&nbsp;</div>
 			</div>
 		</template>
-		
+
 		<template id="new_user_action_message">
 			<div class="user_message action_message truncate %classes%">
 				<div class="message_date">[%date%]</div>
 				<div class="user_name">
 					* <span class="name">%nick%</span>
 				</div>
-				<div class="message">
-					%message% *
-				</div>
+				<div class="message">%message% *</div>
 				<div class="clear">&nbsp;</div>
 			</div>
 		</template>
-		
+
 		<template id="new_server_item">
-			<div class="server_list" network="%network%">
-				<div class="server_title">
-					%name%
-				</div>
+			<div class="server_list sortable" network="%network%">
 				<div network="%network%" channel="network console" class="channel_item console_item">
-					<span class="title">Network Console</span>
+					<span class="title">%name%</span>
 					<div class="unread">0</div>
 					<div class="channel_closer">&nbsp;</div>
 				</div>
 			</div>
 		</template>
-		
+
 		<template id="new_channel_item">
 			<div network="%network%" channel="%attrname%" class="channel_item">
 				<span class="title">%channel%</span>
@@ -316,15 +225,15 @@
 				<div class="channel_closer">&nbsp;</div>
 			</div>
 		</template>
-		
+
 		<template id="new_pm_item">
 			<div network="%network%" channel="%attrname%" class="channel_item pm_item">
 				<span class="title">%channel%</span>
 				<div class="unread">0</div>
 				<div class="channel_closer">&nbsp;</div>
 			</div>
-		</template>		
-		
+		</template>
+
 		<template id="new_pm_window">
 				<div class="channel" network="%network%" type="pm" channel="%attrname%">
 					<div class="meta">
@@ -341,7 +250,7 @@
 					</div>
 				</div>
 		</template>
-		
+
 		<template id="new_channel_window">
 				<div class="channel" network="%network%" type="channel" channel="%attrname%">
 					<div class="meta">
@@ -365,7 +274,7 @@
 					</div>
 				</div>
 		</template>
-		
+
 		<template id="new_console_window">
 
 			<div class="channel" network="%network%" channel="%attrname%" style="display:none">
@@ -374,7 +283,7 @@
 						<span class="chan_name">%channel%</span>
 						/
 						<span class="topic">%netname%</span>
-						
+
 					</div>
 					<div class="clear">&nbsp;</div>
 				</div>

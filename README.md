@@ -2,21 +2,31 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/q0h13y72oanfkbjj/branch/master?svg=true)](https://ci.appveyor.com/project/BurdIRC/burd/branch/master)
 
-AppVeyor: https://ci.appveyor.com/project/BurdIRC/burd
+Burd IRC is an IRC client written for Electron. It supports Windows and Debian based linux.
 
-Website: https://haxed.net
+Website: https://burdirc.haxed.net
 
-## About
-
-Burd IRC is an IRC client that is currently only compatible with Windows. A macOS version of Burd IRC will exist in the very near future. Stay tuned for that.
-
-## Credits
-
+Credits:
 Matthew Ryan - Programming - matt@haxed.net
 
 DetectiveTaco - Support/Development - chris@haxed.net
 
-Sounds - Leszek Szary - https://freesound.org/people/fins/
+## UNIX Installation
+
+**Step One**
+cd ~/Documents
+
+**Step Two**
+git clone https://github.com/BurdIRC/burd/
+
+**Step Three**
+cd burd
+
+**Step Four**
+npm install electron
+
+**Step Five**
+npm start
 
 ## Support
 Need help? Visit our IRC channel #burdirc on chat.freenode.net 
