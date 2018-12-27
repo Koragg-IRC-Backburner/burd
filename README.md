@@ -1,34 +1,62 @@
-# Burd IRC Client
+<h1 align="center">
+ Burd IRC
+ </h1>
 
-[![Build status](https://ci.appveyor.com/api/projects/status/q0h13y72oanfkbjj/branch/master?svg=true)](https://ci.appveyor.com/project/BurdIRC/burd/branch/master)
+<p align="center">
+ <b>
+   <a href="https://burd.detectivetaco.net">Documentation</a>
+   •
+   <a href="https://burdirc.haxed.net">Homepage</a>
+   •
+  <a href="https://ci.appveyor.com/project/BurdIRC/burd/">AppVeyor</a>
+ </b>
+</p>
 
-Burd IRC is an IRC client written for Electron. It supports Windows and Debian based linux.
+<h3 align="center">
+ BurdIRC is a modern IRC client written in HTML and JavaScript and using electron.
+</h3>
 
-Website: https://burdirc.haxed.net
+<p align="center">
+        <a href="irc://chat.freenode.net/burdirc"><img                                     
+                src="https://img.shields.io/badge/freenode-%23burdirc-%238B89EC.svg?style=flat-square"></a>
+</p>        
+<p align="center">
+      <a href="https://ci.appveyor.com/project/BurdIRC/burd/branch/master"><img
+                src="https://ci.appveyor.com/api/projects/status/q0h13y72oanfkbjj/branch/master?svg=true"</a> 
+       </p>
+ <p align="center">
+  <a href='https://burd.detectivetaco.net/en/latest/?badge=latest'>
+    <img src='https://readthedocs.org/projects/burd-documentation/badge/?version=latest' alt='Documentation Status' />
+</a>
+  <p align="center">
+   <a href="https://badge.fury.io/js/burd"><img src="https://badge.fury.io/js/burd.svg" alt="npm version" height="18"></a>
+               </p>
+         
 
-Credits:
-Matthew Ryan - Programming - matt@haxed.net
+<p align="center">
+	<img src="burd-screenshot.png" width="550">
+</p>
 
-DetectiveTaco - Support/Development - chris@haxed.net
 
-## UNIX Installation
+<h3 align="center">
+Latest Releases
+</h3>
 
-**Step One**
-cd ~/Documents
+<p align="center">
+<b>Latest Stable:</b> 0.6.1
+</p>
+<p align="center">
+<b>Latest Development:</b> 0.6.2 (Release Candidate 2)
+</p>
+ 
+ <h3 align="center">
+ About
+ </h3>
+ 
+ <p align="center">Burd IRC is an IRC client that is only compatible currently Windows and Debian based Linux. Burd is still missing certian things as it is fairly new IRC client in early development.</p>
 
-**Step Two**
-git clone https://github.com/BurdIRC/burd/
-
-**Step Three**
-cd burd
-
-**Step Four**
-npm install electron
-
-**Step Five**
-npm start
-
-## Support
-Need help? Visit our IRC channel #burdirc on chat.freenode.net 
-
-Or visit our documentation at https://burd.detectivetaco.net/en/latest/
+<h3 align="center">
+  License
+</h3>
+ 
+<p align="center"> Burd IRC is licensed under the GNU General Public License v3. Burd IRC is free and open source software.</p>
