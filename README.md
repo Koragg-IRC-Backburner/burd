@@ -25,6 +25,12 @@
     <img src='https://readthedocs.org/projects/burd-documentation/badge/?version=latest' alt='Documentation Status'/></a>
  <a href="https://badge.fury.io/js/burd"><img src="https://badge.fury.io/js/burd.svg" alt="npm version" height="18"></a>
                </p>
+
+<p align="center">
+<a href="https://snapcraft.io/burdirc">
+  <img alt="Get it from the Snap Store" src="https://snapcraft.io/static/images/badges/en/snap-store-black.svg" />
+</a>
+</p>
          
 
 <p align="center">
@@ -37,10 +43,10 @@ Latest Releases
 </h3>
 
 <p align="center">
-<b>Latest Stable:</b> 0.6.1
+<b>Latest Stable:</b> 0.6.3
 </p>
 <p align="center">
-<b>Latest Development:</b> 0.6.2 (Release Candidate 2)
+<b>Latest Development:</b> 0.6.3
 </p>
  
  <h3 align="center">
